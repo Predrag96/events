@@ -14,7 +14,7 @@ class CreateConversationRepliesTable extends Migration
     public function up()
     {
         Schema::create('conversation_replies', function (Blueprint $table) {
-            $table->increments('ConversationReplyID');
+            $table->increments('id');
             $table->longText('Reply');
             $table->integer('UserID')->references('UserID')->on('users');
             $table->integer('ConversationID')->references('ConversationID')->on('conversations');

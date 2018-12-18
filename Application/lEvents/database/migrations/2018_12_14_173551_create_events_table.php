@@ -14,7 +14,7 @@ class CreateEventsTable extends Migration
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->increments('EventID');
+            $table->increments('id');
             $table->string('EventName');
             $table->integer('SubID')->references('SubscriptionID')->on('subscriptions');
             $table->integer('UserID')->references('UserID')->on('users');

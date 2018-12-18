@@ -7,7 +7,13 @@
     @if(count($subs)>0)
         @foreach($subs as $s)
             <div>
-                <h5>{{$s->SubName}}</h5>
+                <h5>{{$s->SubName}}, pretplaceni korisnici:</h5>
+
+                @foreach($s->users as $u)
+                <div>
+                <h5>{{$u->FirstName}}</h5>
+                </div>
+                @endforeach
             </div>
         @endforeach
     @else

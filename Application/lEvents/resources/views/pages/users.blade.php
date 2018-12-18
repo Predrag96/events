@@ -4,10 +4,17 @@
     <h1>Welcome to Users page</h1>
 
     <h3>Users</h3>
+
     @if(count($users)>0)
         @foreach($users as $s)
             <div>
-                <h5>{{$s->FirstName. " " .$s->LastName}}</h5>
+                <h5>{{$s->FirstName. " " .$s->LastName}}, teme na koje je subscribovan:</h5>
+
+                @foreach($s->subscriptions as $u)
+                <div>
+                <h5>{{$u->SubName}}</h5>
+                </div>
+                @endforeach
             </div>
         @endforeach
     @else

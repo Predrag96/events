@@ -14,7 +14,7 @@ class CreateEventHasPicturesTable extends Migration
     public function up()
     {
         Schema::create('event_has_pictures', function (Blueprint $table) {
-            $table->increments('EHPID');
+            $table->increments('id');
             $table->integer('EventID')->references('EventID')->on('events');
             $table->integer('PictureID')->references('PictureID')->on('pictures'); 
         });

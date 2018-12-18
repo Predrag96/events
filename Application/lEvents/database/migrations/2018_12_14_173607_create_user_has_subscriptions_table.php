@@ -14,7 +14,7 @@ class CreateUserHasSubscriptionsTable extends Migration
     public function up()
     {
         Schema::create('user_has_subscriptions', function (Blueprint $table) {
-            $table->increments('UHSID');
+            $table->increments('id');
             $table->integer('UID')->references('UserID')->on('users');
             $table->integer('SubID')->references('SubscriptionID')->on('subscriptions');            
         });

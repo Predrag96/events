@@ -54,6 +54,7 @@ class UsersController extends Controller
         $user->DOB = $request->input('dob');
         $user->ProfilePic = $request->input('profilepic');
         $user->save();
+        $user->subscriptions()->attach(1);
 
         return redirect ('/users');
     }

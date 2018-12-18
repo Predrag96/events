@@ -7,8 +7,13 @@
     @if(count($pics)>0)
         @foreach($pics as $s)
             <div>
-                <h5>{{$s->PicturePath}}</h5>
+                <h5>{{$s->PicturePath}}, event kome slika pripada</h5>
             </div>
+            @foreach($s->events as $p)
+            <div>
+                <h5>{{$p->EventName}}</h5>
+            </div>
+        @endforeach
         @endforeach
     @else
         <p>No Pictures found</p>

@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Event;
+use App\User;
+use App\Subscription;
+use App\Comment;
 
 class EventsController extends Controller
 {
@@ -13,7 +17,8 @@ class EventsController extends Controller
      */
     public function index()
     {
-        //
+        $events = Event::all();
+        return view('pages.events')->with("events",$events);
     }
 
     /**
@@ -23,7 +28,8 @@ class EventsController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.events');
+        
     }
 
     /**
@@ -34,7 +40,25 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name'=>'required',
+            'location'=>'required',
+            'time'=>'required',
+            'city'=>'required',
+        ]);
+        $event = new Event();
+        $event->EventName = $request->input('name');
+        $event->Location = $request->input('location');
+        $event->City = $request->input('city');
+        $event->Time = $request->input('time');
+        $event->UserID =User::find(1)->id;
+        $event->SubID = Subscription::find(1)->id;
+        
+        $event->save();
+        $event->users()->attach(1 , ['comment' => 'ovo je neki komentar na neki event']);
+        $event->pictures()->attach(1);
+
+        return redirect ('/events');
     }
 
     /**

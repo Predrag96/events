@@ -14,8 +14,26 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('pages.users')->with("users",$users);
+        return $users = User::with('subscriptions')->get();
+       
+        //return view('pages.users')->with("users",$users);
+    }
+
+    public function login(Request $request)
+    {        
+        $user = new User();
+        $user->Username = $request->input('Username');
+        $user->Password = $request->input('Password');
+
+        $U=User::where('Username',$user->Username)
+            ->where('Password', $user->Password)
+            ->first();
+
+        if (isset($U)) 
+        {
+            return $U;   
+        }
+        else return 0;
     }
 
     /**
@@ -34,29 +52,37 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function register(Request $request)
     {
-        $this->validate($request, [
-            'firstname'=>'required',
-            'lastname'=>'required',
-            'email'=>'required',
-            'password'=>'required',
-            'username'=>'required',
-            'dob'=>'required',
-            'profilepic'=>'required'
-        ]);
         $user = new User();
-        $user->FirstName = $request->input('firstname');
-        $user->LastName = $request->input('lastname');
-        $user->Email = $request->input('email');
-        $user->Password = $request->input('password');
-        $user->Username = $request->input('username');
-        $user->DOB = $request->input('dob');
-        $user->ProfilePic = $request->input('profilepic');
+        $user->FirstName = $request->input('FirstName');
+        $user->LastName = $request->input('LastName');
+        $user->Email = $request->input('Email');
+        $user->Password = $request->input('Password');
+        $user->Username = $request->input('Username');
+        $user->DOB = $request->input('DOB');
+        $user->ProfilePic = '';
         $user->save();
-        $user->subscriptions()->attach(1);
+        if(isset ($user->id))
+            return $user;
+        else return 0;
+    }
 
-        return redirect ('/users');
+    public function reg(Request $request)
+    {
+        $user=User::where('id', $request->input('userID'))->first();
+        $sub=array();
+        $sub= $request->input('subscriptionIDs');
+
+        if(count($sub)>0)
+        {
+            foreach($sub as $n)
+            {
+                $user->subscriptions()->attach($n);
+            }
+            $user->save();            
+        }
+        return 1;
     }
 
     /**

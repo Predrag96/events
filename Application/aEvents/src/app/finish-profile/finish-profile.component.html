@@ -1,0 +1,17 @@
+<!-- 
+  <div *ngFor="let sub of subscriptions">
+  <p>{{sub.SubName}}</p>
+</div> 
+-->
+
+<form (ngSubmit)="OnButtonClick(fm)" #fm="ngForm">
+   
+    <div class="form-group" *ngFor="let sub of subscriptions;let i = index">
+        <label for="name">
+          <input type="checkbox" name={{i}} (change)="OnCheckBoxChange(sub,$event)" ngModel value="{{sub.id}}" />
+          {{sub.SubName}}:
+      </label>
+      </div>
+   
+  <button type="submit" class="btn btn-primary">Pick subscriptions</button>
+</form> 

@@ -1,0 +1,98 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+html,body,app-profile-page{
+  width: 100%;
+  height: 100%;
+}
+
+.page{
+  width: 100%;
+  height: 100%;
+  background: #cee1ff;
+}
+
+.container{
+  width: 100%;
+  height: 100%;
+  background: #cee1ff;
+  display: flex;  
+  flex-direction: column;
+}
+
+.picture, img{
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    margin-right: 5%;
+}
+
+.event{
+    margin: 5px;
+    border: 1px solid black;
+}
+
+.menuBtn{
+  position: absolute;
+  right: 0;
+  font-size: 0.9em;
+}
+
+.mat-toolbar{
+  background: #001f3f !important;
+  color: #0074d9 !important;
+}
+
+.mat-menu-item{
+  background: #001f3f !important;
+  color: #0074d9 !important;
+}
+
+.rating{
+  background: #001f3f;
+}
+
+
+
+// fieldset, label { margin: 0; padding: 0; }
+// body{ margin: 20px; }
+// h1 { font-size: 1.5em; margin: 10px; }
+
+/****** Style Star Rating Widget *****/
+
+.rating { 
+  border: none;
+  position: relative;
+  bottom: 0;
+}
+
+.rating > input { display: none; } 
+.rating > label:before { 
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating > .half:before { 
+  content: "\f089";
+  position: absolute;
+}
+
+.rating > label { 
+  color: #ddd; 
+ float: right; 
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+.rating:not(:checked) > label:hover, /* hover current star */
+.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 

@@ -1,22 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {NgForm} from '@angular/forms';
 import {DataService} from '../data.service'
+import { Router, NavigationExtras } from '@angular/router';
+import { User } from '../user';
+
 
 @Component({
-  selector: 'app-login-page',
+  selector: 'app-login-page', 
+  template:'<app-profile-page [userInformation]="user"></app-profile-page>',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
+
 })
+
 export class LoginPageComponent implements OnInit {
 
-  users:Object;
-
-  constructor(private data:DataService) { }
+  user:User;
+  message:string;
   
-
+  constructor(private router:Router,private data:DataService) { }
+  
   ngOnInit() {
-    
+
   }
 
   // getUsers()
@@ -25,9 +30,29 @@ export class LoginPageComponent implements OnInit {
   // }
 
   OnButtonClick(form:NgForm){
-    this.data.login(form).subscribe(data=>{
-      this.users = data
-      console.log(this.users)
+    this.data.login(form).subscribe(returnedData=>{
+     
+      if(returnedData == -1)
+        alert("Netacne informacije");
+      else
+      {
+        
+        this.user = new User(returnedData["id"],returnedData["FirstName"],returnedData["LastName"],returnedData["Username"]);
+        this.user.PicturePath = returnedData["PicturePath"];
+        console.log(this.user);
+        let navigationExtras: NavigationExtras = {
+          queryParams: {
+              "id": this.user.id,
+              "FirstName": this.user.FirstName,
+              "LastName": this.user.LastName,
+              "Username": this.user.Username,
+              "PicturePath":this.user.PicturePath
+          }
+      };
+        this.router.navigate(["/profile-page"],navigationExtras);
+        //console.log(this.user);
+      }
+       
     })
   }
 

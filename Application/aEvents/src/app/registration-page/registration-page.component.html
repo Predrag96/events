@@ -1,55 +1,70 @@
-<div class="container">
-    <h1>
-      Welcome to Events!!
-    </h1>
-    <hr />
-      <form (ngSubmit)="OnButtonClick(fm)" #fm="ngForm">
-          <div class="form-group">
-              <label for="FirstName">First Name:</label>
-              <input type="text" class="form-control" ngModel #name1="ngModel" name="FirstName" required />
-              <div *ngIf="name1.invalid && (name1.dirty || name1.touched)">
-                    <alert>FirstName is required</alert>
-              </div>
-            </div>
-
-            <div class="form-group">
-                <label for="LastName">Last Name:</label>
-                <input type="text" class="form-control" ngModel #name2="ngModel" name="LastName" required />
-                <div *ngIf="name2.invalid && (name2.dirty || name2.touched)">
-                      <alert>Last Name is required</alert>
-                </div>
-              </div>
-
+<html>
+  <head>
+    <title>Events</title>
+  </head>
+<body>
+    <div class="page">
+      <div class="container">
+        <h3>
+          Welcome to Events!!
+        </h3>
+        
+          <form (ngSubmit)="OnButtonClick()" #fm="ngForm">
               <div class="form-group">
-                  <label for="EMail">Email:</label>
-                  <input type="email" class="form-control" ngModel email #name3="ngModel" name="Email"  required />
-                  <div *ngIf="name3.invalid && (name3.dirty || name3.touched)">
-                        <alert>Email is required</alert>
-                  </div>
+                <mat-form-field>            
+                  <input matInput class="input" ngModel name="FirstName" required [(ngModel)]="newUser.FirstName"/>             
+                  <mat-placeholder class="placeholder" >First Name</mat-placeholder>
+                </mat-form-field>  
                 </div>
 
                 <div class="form-group">
-                    <label for="DOB">Date of Birth:</label>
-                    <input type="date" class="form-control" ngModel date #name4="ngModel" name="DOB"  required />
-                    <div *ngIf="name4.invalid&& (name4.dirty || name4.touched)">
-                          <alert>DOB is required</alert>
-                    </div>
+                    <mat-form-field>
+                    <input matInput ngModel class="input" name="LastName" required [(ngModel)]="newUser.LastName"  />
+                    <mat-placeholder class="placeholder" >Last Name</mat-placeholder>
+                  </mat-form-field>
                   </div>
 
-        <div class="form-group">
-          <label for="name">Username:</label>
-          <input type="text" class="form-control" ngModel #name5="ngModel" name="Username" required />
-          <div *ngIf="name5.invalid && (name5.dirty || name5.touched)">
-                <alert>Username is required</alert>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="price">Password:</label>
-          <input type="password" class="form-control" ngModel #name6="ngModel" name="Password" required>
-          <div *ngIf="name6.invalid && (name6.dirty || name6.touched)">
-              <alert>Password is required</alert>
-        </div>
-        </div>
-        <button type="submit" routerLink="/finish-profile-page" class="btn btn-primary" [disabled]="fm.invalid" >Register</button>
-      </form>
-  </div>
+                  <div class="form-group">
+                      <mat-form-field>
+                      <input matInput email class="input" ngModel  name="Email" required [(ngModel)]="newUser.Email" />
+                      <mat-placeholder class="placeholder" >email@example.com</mat-placeholder>
+                    </mat-form-field>
+                  </div>
+
+                    <div class="form-group">
+                        <mat-form-field>
+                          <!-- <input matDatepicker ngModel name="DOB"  required [(ngModel)]="newUser.DOB" /> -->
+                          <input matInput class="input" readonly [matDatepicker]="myDatepicker" (dateChange)="onDateValueChange($event.value)" is required ngModel name="DOB" />
+                          <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+                          <mat-datepicker #myDatepicker></mat-datepicker>
+                          <mat-placeholder class="placeholder" >DateOfBirth</mat-placeholder>
+                        </mat-form-field>
+                      </div>
+
+            <div class="form-group">
+              <mat-form-field>
+                <input matInput ngModel name="Username" required [(ngModel)]="newUser.Username"/>
+                <mat-placeholder class="placeholder" >Username</mat-placeholder>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field>
+                <input matInput type="password" ngModel name="Password" required [(ngModel)]="newUser.Password" >
+                <mat-placeholder class="placeholder" >Password</mat-placeholder>
+              </mat-form-field>
+            </div>
+              <div class="checkbox-container" >
+              <h4>Pick your interests:</h4>
+
+                <div class="checkboxes" *ngFor="let sub of subscriptions;let i = index">
+                  <!-- <input matInput type="checkbox" name={{i}} (change)="OnCheckBoxChange(sub,$event)" ngModel value="{{sub.id}}" />  -->
+                    <mat-checkbox name={{i}} (change)="OnCheckBoxChange(sub.id,$event)" ngModel value="{{sub.id}}" >{{sub.SubName}}</mat-checkbox>         
+                </div>   
+            </div>
+            <button class="RegisterBtn" mat-fab type="submit" [disabled]="fm.invalid" >Register</button>
+          </form>
+      </div>
+    </div>
+</body>
+</html>

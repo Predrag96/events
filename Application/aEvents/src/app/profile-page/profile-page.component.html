@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>Events</title>
+  </head>
+  <body>
+     <mat-toolbar>
+      <span>Welcome to events {{user.FirstName}} {{user.LastName}}</span>      
+        <div class="picture">
+          <img src="{{user.PicturePath}}" />          
+        </div>
+        <button class="menuBtn" mat-button [matMenuTriggerFor]="menu">Menu</button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="OnCreateNewEventClick()" >Create new event</button>
+          <input style="display: none" type="file" (change)="OnFileSelected($event)" #fileInput>
+          <button mat-menu-item (click)="fileInput.click()" >Change Profile Picture</button>
+        </mat-menu>    
+    </mat-toolbar>
+  <div class="page">
+    <div class="container">
+        <div class="event" *ngFor="let event of events;let i=index">
+            <h4>{{event.EventName}}</h4>
+            <p>
+              {{event.City}} : {{event.Location}} at {{event.Time}}
+              <br>
+              <button class="btn btn-primary" [id]="i"  (click)="ToggleEventDetails($event)" >Toggle Event Details</button>
+              <ng-container *ngIf="IsVisible(i)">
+                 <p>Komentari</p>
+              </ng-container>
+            </p>
+            <br>        
+            <fieldset class="rating">
+              <input (click)="starHandler(5,event.id)" type="radio" id="star5_1+{{event.id}}" name="rating_1+{{event.id}}" value="5" /><label class = "full" for="star5_1+{{event.id}}" title="Awesome - 5 stars"></label>
+              <input (click)="starHandler(4.5,event.id)" type="radio" id="star4half_1+{{event.id}}" name="rating_1+{{event.id}}" value="4 and a half" /><label class="half" for="star4half_1+{{event.id}}" title="Pretty good - 4.5 stars"></label>
+              <input (click)="starHandler(4,event.id)" type="radio" id="star4_1+{{event.id}}" name="rating_1+{{event.id}}" value="4" /><label class = "full" for="star4_1+{{event.id}}" title="Pretty good - 4 stars"></label>
+              <input (click)="starHandler(3.5,event.id)" type="radio" id="star3half_1+{{event.id}}" name="rating_1+{{event.id}}" value="3 and a half" /><label class="half" for="star3half_1+{{event.id}}" title="Meh - 3.5 stars"></label>
+              <input (click)="starHandler(3,event.id)" type="radio" id="star3_1+{{event.id}}" name="rating_1+{{event.id}}" value="3" /><label class = "full" for="star3_1+{{event.id}}" title="Meh - 3 stars"></label>
+              <input (click)="starHandler(2.5,event.id)" type="radio" id="star2half_1+{{event.id}}" name="rating_1+{{event.id}}" value="2 and a half" /><label class="half" for="star2half_1+{{event.id}}" title="Kinda bad - 2.5 stars"></label>
+              <input (click)="starHandler(2,event.id)" type="radio" id="star2_1+{{event.id}}" name="rating_1+{{event.id}}" value="2" /><label class = "full" for="star2_1+{{event.id}}" title="Kinda bad - 2 stars"></label>
+              <input (click)="starHandler(1.5,event.id)" type="radio" id="star1half_1+{{event.id}}" name="rating_1+{{event.id}}" value="1 and a half" /><label class="half" for="star1half_1+{{event.id}}" title="Meh - 1.5 stars"></label>
+              <input (click)="starHandler(1,event.id)" type="radio" id="star1_1+{{event.id}}" name="rating_1+{{event.id}}" value="1" /><label class = "full" for="star1_1+{{event.id}}" title="Sucks big time - 1 star"></label>
+              <input (click)="starHandler(0.5,event.id)" type="radio" id="starhalf_1+{{event.id}}" name="rating_1+{{event.id}}" value="half" /><label class="half" for="starhalf_1+{{event.id}}" title="Sucks big time - 0.5 stars"></label>
+          </fieldset>
+         
+          </div> 
+    </div>
+  </div>
+  </body>
+</html>

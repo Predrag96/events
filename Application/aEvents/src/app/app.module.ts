@@ -5,33 +5,56 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { LoginPageComponent } from './login-page/login-page.component';
-import { WelcomePageComponent } from './welcome-page/welcome-page.component';
+
 
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
 import {AlertModule} from 'ngx-bootstrap';
 import { RegistrationPageComponent } from './registration-page/registration-page.component';
-import { FinishProfileComponent } from './finish-profile/finish-profile.component';
+
+import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { CreateEventPageComponent } from './create-event-page/create-event-page.component';
+
+import {MatInputModule, MatToolbarModule, MatMenuModule, MatFormFieldModule, MatButtonModule ,MatSelectModule, MatOptionModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatSidenavModule} from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+import { PusherService } from './pusher.service';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
-    WelcomePageComponent,
-    RegistrationPageComponent,
-    FinishProfileComponent
+    RegistrationPageComponent,   
+    ProfilePageComponent,
+    CreateEventPageComponent,
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    AlertModule.forRoot()
+    AlertModule.forRoot(),
+    
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatMenuModule,
+
+    BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [PusherService],
   bootstrap: [AppComponent]
 })
+
 
 export class AppModule { }

@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import {LoginPageComponent} from './login-page/login-page.component';
-import {RegistrationPageComponent} from './registration-page/registration-page.component';
-import {WelcomePageComponent} from './welcome-page/welcome-page.component';
-import {FinishProfileComponent} from './finish-profile/finish-profile.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+import { RegistrationPageComponent } from './registration-page/registration-page.component';
+
+import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { CreateEventPageComponent } from './create-event-page/create-event-page.component';
 
 const routes: Routes = [
-  {path:'', component: WelcomePageComponent},
-  {path: 'login-page', component: LoginPageComponent},
+  
+  {path:'', component: LoginPageComponent},
   {path: 'registration-page', component:RegistrationPageComponent},
-  {path: 'finish-profile-page', component: FinishProfileComponent}
+  {path: 'profile-page', component:ProfilePageComponent},
+  {path: 'create-event-page',component:CreateEventPageComponent}
 ];
 
 @NgModule({

@@ -1,14 +1,16 @@
+import { User } from "./user";
+
 export class Subscriptions {
     subscriptionIDs : Array<String> 
-    userID: String
+    user: User;
     
-    constructor($id){
+    constructor(){
         this.subscriptionIDs = new Array<String>();
-        this.userID = $id;
+        
     }
 
-    public pushIntoArray($id:String){
-        this.subscriptionIDs.push($id);
+    public addSubscriptionIDs($SubID:String){
+        this.subscriptionIDs.push($SubID);
     }
 
     public returnSubscriptions(){

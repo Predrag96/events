@@ -6,24 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Comment;
 use App\Subscription;
+use App\Rating;
 use App\Picture;
 
 class Event extends Model
 {
     protected $table = 'events';
     public $timestamps = false;
+    protected $fillable = ['EventName', 'SubID', 'UserID', 'Location', 'Time', 'City'];
 
-    public function user(){
-        return $this->belongsTo('App\Users', 'UserID', 'id');
+    
+    public function creator(){
+        return $this->belongsTo('App\User', 'UserID', 'id');
     }
 
-    public function subscription(){
+    public function category(){
         return $this->belongsTo('App\Subscription', 'SubID', 'id');
     }
 
-    public function users(){
+    public function userComments(){
         return $this->belongsToMany('App\User', 'comments', 'EventID', 'UserID' )
-        ->withPivot('comment');
+        ->withPivot('Comment');
+    }
+
+    public function userRatings(){
+        return $this->belongsToMany('App\User', 'ratings', 'EventID', 'UserID' )
+        ->withPivot('Rating');
     }
 
     public function pictures(){

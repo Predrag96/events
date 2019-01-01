@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Event;
 use App\Comment;
+use App\Rating;
 
 class User extends Model
 {
@@ -17,7 +18,12 @@ class User extends Model
 
     public function commentedEvents(){
         return $this->belongsToMany( 'App\Event', 'comments', 'UserID', 'EventID')
-        ->withPivot('comment');
+        ->withPivot('Comment');
+    }
+
+    public function ratedEvents(){
+        return $this->belongsToMany( 'App\Event', 'ratings', 'UserID', 'EventID')
+        ->withPivot('Rating');
     }
 
     public function subscriptions(){

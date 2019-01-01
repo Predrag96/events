@@ -7,16 +7,87 @@ use App\User;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return $users = User::with('subscriptions')->get();
+        $users = User::all();
        
-        //return view('pages.users')->with("users",$users);
+        return view('pages.users')->with("users",$users);
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $user=User::where('id', $request->input('userID'))->first();
+
+        if($user->ProfilePic!='default.png')
+                {
+                $image_path = public_path().'/images/'.$U->ProfilePic; 
+                unlink($image_path);
+                }
+        $user->delete();
+        return 1;
+    }
+
+    public function getbyname(Request $request)
+    {
+        $users= User::where('FirstName', $request->input('FirstName'))->
+        where('LastName', $request->input('LastName'))->get();
+        if(isset($users))
+        {return $users;}
+        else {return -1;}
+    }
+
+    public function userdetails()
+    {
+        return User::with('commentedEvents', 'ratedEvents', 'subscriptions', 'createdEvents')->get();
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'firstname'=>'required',
+            'lastname'=>'required',
+            'email'=>'required',
+            'password'=>'required',
+            'username'=>'required',
+            'dob'=>'required',
+            'profilepic'=>'required'
+        ]);
+        $user = new User();
+        $user->FirstName = $request->input('firstname');
+        $user->LastName = $request->input('lastname');
+        $user->Email = $request->input('email');
+        $user->Password = $request->input('password');
+        $user->Username = $request->input('username');
+        $user->DOB = $request->input('dob');
+        $user->ProfilePic = $request->input('profilepic');
+        $user->save();
+        $user->subscriptions()->attach(1);
+
+        return redirect ('/users');
+    }
+
+    public function changeSubs(Request $request)
+    {
+        $user=User::where('id', $request->input('userID'))->first();
+        $sub=array();
+        $sub= $request->input('subscriptionIDs');
+        $pom= array();
+        
+        $pom= $user->subscriptions();
+        foreach($pom as $s)
+        {
+            $user->subscriptions()->detach($s);
+        }
+
+        if(count($sub)>0)
+        {
+            foreach($sub as $n)
+            {
+                $user->subscriptions()->attach($n);
+            }
+            $user->save();            
+        }
+        return 1;
     }
 
     public function login(Request $request)
@@ -31,29 +102,104 @@ class UsersController extends Controller
 
         if (isset($U)) 
         {
-            return $U;   
+            $mess= array("id"=>$U->id, "FirstName"=>$U->FirstName, "LastName"=>$U->LastName, 
+            "Username"=>$U->Username, "PicturePath"=>$U->ProfilePic);
+            return $mess;
         }
-        else return 0;
+        else return -1;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function changePassword(Request $request)
     {
-        return view('pages.users');
+        $U=User::where('id',$request->input('id'))->first();
+        if(isset($U))
+        {
+            $U->Password=$request->input("Password");
+            $U->save();
+            return 1;
+        }
+        else return -1;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function changePicture(Request $request)
+    {
+        $U=User::where('id',$request->input('id'))->first();
+        if(isset($U))
+        {
+            $image= $request->file('image');
+            if(isset($image))
+            {
+                if($U->ProfilePic!='default.png')
+                {
+                $image_path = public_path().'/images/'.$U->ProfilePic; 
+                unlink($image_path);
+                }
+
+            $imagename= time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/images');
+            $image->move($destinationPath, $imagename);
+            $U->ProfilePic=$imagename;
+            $U->save();
+            return 1;
+            }
+            else return -2;
+        }
+        else return -1;
+    }
+
+    public function addPicture(Request $request)
+    {
+        //return $request;
+        $U=User::where('id',$request->input('id'))->first();
+            if(isset($U))
+            {
+                $image= $request->file('image');
+                if(isset($image))
+                {
+                $imagename= time() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('/images');
+                $image->move($destinationPath, $imagename);
+                $U->ProfilePic=$imagename;
+                $U->save();
+                return 1;
+                }
+                else return -2;
+            }
+        //$id= Input::get('id');
+        else return -1;
+        // if(isset($id))
+        // {
+        //     $U=User::where('id',$id)->first();
+        //     if(isset($U))
+        //     {
+        //         $image= $request->file('image');
+        //         $input['imagename']= time()+ '.'+ $image->getClientOriginalExtension();
+        //         $destinationPath = public_path('/images');
+        //         $image->move($destinationPath, $input['imagename']);
+        //         $U->ProfilePic=$input['imagename'];
+        //         $U->save();
+        //     }
+        // }   
+    }
+
     public function register(Request $request)
     {
+        $U=User::where('Username',$request->input('Username'))
+            ->first();
+
+        if (isset($U)) 
+        {
+            return -2;
+        }
+
+        $U=User::where('Email',$request->input('Email'))
+            ->first();
+
+        if (isset($U)) 
+        {
+            return -3;
+        }
+
         $user = new User();
         $user->FirstName = $request->input('FirstName');
         $user->LastName = $request->input('LastName');
@@ -61,18 +207,11 @@ class UsersController extends Controller
         $user->Password = $request->input('Password');
         $user->Username = $request->input('Username');
         $user->DOB = $request->input('DOB');
-        $user->ProfilePic = '';
+        $user->ProfilePic = 'default.png';
         $user->save();
-        if(isset ($user->id))
-            return $user;
-        else return 0;
-    }
-
-    public function reg(Request $request)
-    {
-        $user=User::where('id', $request->input('userID'))->first();
+       
         $sub=array();
-        $sub= $request->input('subscriptionIDs');
+        $sub= $request->input('SubscriptionIDs');
 
         if(count($sub)>0)
         {
@@ -80,53 +219,17 @@ class UsersController extends Controller
             {
                 $user->subscriptions()->attach($n);
             }
-            $user->save();            
+            $user->save();
+            // $image= $request->file('image');
+            // $input['imagename']= time()+ '.'+ $image->getClientOriginalExtension();
+            // $destinationPath = public_path('/images');
+            // $image->move($destinationPath, $input['imagename']);
+            //*****//sacuvaj picturePath
         }
-        return 1;
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        if(isset($user))
+            return $user->id;
+        else
+            return -1;
     }
 }

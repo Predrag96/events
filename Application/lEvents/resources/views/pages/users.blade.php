@@ -15,6 +15,19 @@
                 <h5>{{$u->SubName}}</h5>
                 </div>
                 @endforeach
+                <h5>Komentari korinika na neki event:</h5>
+                @foreach($s->commentedEvents as $c)
+                <div>
+                <h5>{{$c->pivot->Comment}}</h5>
+                </div>
+                @endforeach
+
+                <h5>Ocene korinika na neki event:</h5>
+                @foreach($s->ratedEvents as $v)
+                <div>
+                <h5>{{$v->pivot->Rating}}</h5>
+                </div>
+                @endforeach
             </div>
         @endforeach
     @else

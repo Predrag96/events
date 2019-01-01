@@ -7,13 +7,13 @@
     @if(count($events)>0)
         @foreach($events as $s)
             <div>
-                <h5>{{$s->EventName}}, putanja do slike za ovaj event:</h5>                    
+                <h5>{{$s->EventName}}, ocene za ovaj event:</h5>                    
             </div>
-            @foreach($s->pictures as $u)
+            @foreach($s->userRatings as $u)
                     <div>
-                    <h5>{{$u->PicturePath}}</h5>
+                    <h5>{{$u->pivot->Rating}}</h5>
                     </div>
-                    @endforeach
+            @endforeach
         @endforeach
     @else
         <p>No events found</p>

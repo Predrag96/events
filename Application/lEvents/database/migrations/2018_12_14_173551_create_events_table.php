@@ -16,8 +16,8 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->increments('id');
             $table->string('EventName');
-            $table->integer('SubID')->references('SubscriptionID')->on('subscriptions');
-            $table->integer('UserID')->references('UserID')->on('users');
+            $table->integer('SubID')->references('id')->on('subscriptions');
+            $table->integer('UserID')->references('id')->on('users')->nullable();
             $table->string('City');
             $table->string('Location');
             $table->string('Time');

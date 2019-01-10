@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Settings</title>
+  </head>
+  <body>
+    
+      <mat-toolbar>
+        <span>Settings</span>
+      </mat-toolbar>
+           <div class="Sidenav">
+              <button class="SidenavContent" (click)="OnChangePasswordClicked()"  mat-flat-button>Change Password</button>
+              <div class="content">
+                  <ng-container *ngIf="changePasswordVisible">
+                    <h1>Change Password</h1>
+                    <form class="form" (ngSubmit)="OnButtonClick(fm)" #fm="ngForm">     
+                        
+                          <mat-form-field>
+                            <input matInput type="password" class="input" ngModel name="OldPassword" required />      
+                            <mat-placeholder class="placeholder">OldPassword</mat-placeholder>         
+                          </mat-form-field>       
+                                            
+                          <mat-form-field>
+                            <input matInput (input)="OnTextInputChange(newPass.value, passMatch.value)" class="input" type="password" ngModel name="Password" required #newPass/>
+                            <mat-placeholder class="placeholder">New Password</mat-placeholder>
+                        </mat-form-field>                      
+                      
+                          <mat-form-field>
+                            <input matInput  (input)="OnTextInputChange(newPass.value,passMatch.value)" class="input" type="password" ngModel name="RepeatPassword" required #passMatch />
+                            <mat-placeholder class="placeholder">Repeat Password</mat-placeholder>
+                        </mat-form-field>
+                        <ng-container *ngIf="passwordsDontMatch">
+                          <p style="color:red" >Passwords don't match</p>
+                        </ng-container>
+                          
+                      <button mat-fab type="submit" [disabled]="passwordsDontMatch || fm.invalid" >Change</button>
+                    </form>
+                  </ng-container>
+                  
+               </div>
+          </div>
+         
+        
+      
+        
+       
+    
+   
+  </body>
+</html>

@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Events</title>
+
   </head>
   <body>
      <mat-toolbar>
@@ -10,21 +11,42 @@
         </div>
         <button class="menuBtn" mat-button [matMenuTriggerFor]="menu">Menu</button>
         <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="OnSettingsClick()">Settings</button>
           <button mat-menu-item (click)="OnCreateNewEventClick()" >Create new event</button>
           <input style="display: none" type="file" (change)="OnFileSelected($event)" #fileInput>
-          <button mat-menu-item (click)="fileInput.click()" >Change Profile Picture</button>
+          <button mat-menu-item (click)="fileInput.click()" >Change Profile Picture</button>         
         </mat-menu>    
     </mat-toolbar>
+    
   <div class="page">
+    
     <div class="container">
-        <div class="event" *ngFor="let event of events;let i=index">
+      <notifier-container></notifier-container>
+      <div class="event" *ngFor="let event of events;let i=index">
             <h4>{{event.EventName}}</h4>
+            <div class="picture-container">
+            <div *ngFor="let picturePath of event.PicturePath; let i=index">
+                <img class="EventPicture" [src]=picturePath />
+            </div>
+              <br>
+            </div>
             <p>
               {{event.City}} : {{event.Location}} at {{event.Time}}
               <br>
-              <button class="btn btn-primary" [id]="i"  (click)="ToggleEventDetails($event)" >Toggle Event Details</button>
+              Average rating: {{event.Rating}}
+              <br>
+
+              <button class="btn btn-primary" [id]="i"  (click)="ToggleEventDetails($event, event.id)" >Toggle Event Details</button>
               <ng-container *ngIf="IsVisible(i)">
-                 <p>Komentari</p>
+                  <ng-container>
+                    <p>Komentari</p>
+                    <p *ngFor="let comment of comments">
+                      @ {{comment.username}} : {{comment.comment}}
+                    </p>
+                  </ng-container>
+                 <textarea placeholder="Enter your comment here" #Comment></textarea>
+                 <br>
+                 <button mat-fab (click)="OnCommentButtonClick(Comment.value, event)" >Post</button>
               </ng-container>
             </p>
             <br>        
@@ -43,6 +65,7 @@
          
           </div> 
     </div>
+    
   </div>
   </body>
 </html>

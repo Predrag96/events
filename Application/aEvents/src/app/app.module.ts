@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { NotifierModule } from 'angular-notifier';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -20,6 +22,7 @@ import {MatInputModule, MatToolbarModule, MatMenuModule, MatFormFieldModule, Mat
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { PusherService } from './pusher.service';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 
 
 @NgModule({
@@ -29,7 +32,8 @@ import { PusherService } from './pusher.service';
     RegistrationPageComponent,   
     ProfilePageComponent,
     CreateEventPageComponent,
-
+    SettingsPageComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -37,7 +41,8 @@ import { PusherService } from './pusher.service';
     FormsModule,
     HttpClientModule,
     AlertModule.forRoot(),
-    
+    NotifierModule.withConfig(),
+
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,

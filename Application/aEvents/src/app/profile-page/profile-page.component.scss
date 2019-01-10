@@ -24,8 +24,8 @@ html,body,app-profile-page{
     height: 64px;
     border-radius: 50%;
     position: absolute;
-    right: 0;
-    margin-right: 5%;
+    left: 0;
+    margin-left: 50%;
 }
 
 .event{
@@ -53,7 +53,11 @@ html,body,app-profile-page{
   background: #001f3f;
 }
 
-
+.EventPicture{
+  width: 128px;
+  height: 128px;
+  float: right;
+}
 
 // fieldset, label { margin: 0; padding: 0; }
 // body{ margin: 20px; }

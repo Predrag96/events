@@ -6,13 +6,15 @@ import { RegistrationPageComponent } from './registration-page/registration-page
 
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { CreateEventPageComponent } from './create-event-page/create-event-page.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 
 const routes: Routes = [
   
   {path:'', component: LoginPageComponent},
   {path: 'registration-page', component:RegistrationPageComponent},
   {path: 'profile-page', component:ProfilePageComponent},
-  {path: 'create-event-page',component:CreateEventPageComponent}
+  {path: 'create-event-page',component:CreateEventPageComponent},
+  {path: 'settings-page',component:SettingsPageComponent}
 ];
 
 @NgModule({

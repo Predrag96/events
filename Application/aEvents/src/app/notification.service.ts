@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import * as Pusher from 'pusher-js';
-import {environment} from '../environments/environment';
-import {HttpClient} from '@angular/common/http';
 import { Subject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { DataService } from './data.service';
+import { environment } from 'src/environments/environment';
+import * as Pusher from 'pusher-js';
 
 @Injectable({
   providedIn: 'root'
 })
-//comment service
-export class CommentService {
+export class NotificationService {
 
   pusher:any;
   channel:any;
@@ -17,17 +16,18 @@ export class CommentService {
 
   private subject: Subject<Object> = new Subject<Object>();
 
-  constructor(private http:HttpClient,data:DataService, eventID:string) { 
+  constructor(private http:HttpClient, eventID:string, private data:DataService) { 
     this.pusher = new Pusher(environment.pusher.key,{
       cluster:environment.pusher.cluster,
       encrypted:true,
-      //cluster:'eu',
       authEndpoint: data.$ServerIP+"/pusher/auth"
+      //cluster:'eu',
+      //authEndpoint: 'http://192.168.0.102:8000/pusher/auth'
     });
 
-    this.channel = this.pusher.subscribe('comment.'+eventID);
+    this.channel = this.pusher.subscribe('ChannelName.'+eventID);
     
-    this.channel.bind('eventComment',data=>{
+    this.channel.bind('eventName', data=>{
       this.subject.next(data);
       
     })
@@ -38,5 +38,4 @@ export class CommentService {
   {
     return this.subject.asObservable();
   }
-
 }

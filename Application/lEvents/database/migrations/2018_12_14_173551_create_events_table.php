@@ -21,6 +21,7 @@ class CreateEventsTable extends Migration
             $table->string('City');
             $table->string('Location');
             $table->string('Time');
+            $table->double('Rating',2,1);
         });
     }
 

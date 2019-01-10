@@ -18,14 +18,16 @@ Route::post('/changepicture', ['uses' => 'UsersController@changePicture']);
 
 Route::put('/changepassword', ['uses' => 'UsersController@changePassword']);
 
-Route::delete('/deleteuser', ['uses' => 'UsersController@deleteUser']);
+//Route::delete('/deleteuser', ['uses' => 'UsersController@deleteUser']);
 
 //Events
 Route::get('/allevents', ['uses' => 'EventsController@alle']);
 
-Route::post('/getFiltered', ['uses' => 'EventsController@filteredEvents']);
+Route::post('/getfiltered', ['uses' => 'EventsController@filteredEvents']);
 Route::post('/addevent', ['uses' => 'EventsController@addEvent']);
 Route::post('/addcomment', ['uses' => 'EventsController@addcomment']);
+Route::post('/getcomments', ['uses' => 'EventsController@getComments']);
+Route::post('/insertpictures', ['uses' => 'EventsController@insertPictures']);
 
 Route::put('/addrating', ['uses' => 'EventsController@addrating']);
 

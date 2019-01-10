@@ -99,11 +99,14 @@ class UsersController extends Controller
         $U=User::where('Username',$user->Username)
             ->where('Password', $user->Password)
             ->first();
+        $subs= array();
+        foreach($U->subscriptions as $s)
+        array_push($subs,$s->id);
 
         if (isset($U)) 
         {
             $mess= array("id"=>$U->id, "FirstName"=>$U->FirstName, "LastName"=>$U->LastName, 
-            "Username"=>$U->Username, "PicturePath"=>$U->ProfilePic);
+            "Username"=>$U->Username, "PicturePath"=>$U->ProfilePic, "SubscriptionIDs"=>$subs );
             return $mess;
         }
         else return -1;
@@ -111,12 +114,16 @@ class UsersController extends Controller
 
     public function changePassword(Request $request)
     {
-        $U=User::where('id',$request->input('id'))->first();
+        $U=User::where('id',$request->input('UserID'))->first();
         if(isset($U))
         {
-            $U->Password=$request->input("Password");
+            if($U->Password==$request->input('OldPassword'))
+            {
+            $U->Password=$request->input('NewPassword');
             $U->save();
             return 1;
+            }
+            else return -2;
         }
         else return -1;
     }

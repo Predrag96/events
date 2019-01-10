@@ -29,7 +29,7 @@ class NewEvent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-       return new Channel('event');
+       return new Channel('event.'. $this->event->SubID);
        //$this->trigger('my-channel', 'my-event', array('message' => 'hello world'));
        //return ['kanal'];
     }

@@ -14,12 +14,16 @@ class NewComment implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 
-    public $commentInfo;
+    //public $commentInfo;
+    public $comment;
+    public $username;
     public $eventId;
 
-    public function __construct(Array $a, $id)
+    public function __construct($c, $u, $id)
     {
-        $this->commentInfo=$a;
+        //$this->commentInfo=$a;
+        $this->comment=$c;
+        $this->username=$u;
         $this->eventId=$id;
     }
 

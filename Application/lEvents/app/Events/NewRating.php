@@ -17,12 +17,12 @@ class NewRating implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 
-    public $ratingInfo;
+    public $rating;
     public $eventId;
 
-    public function __construct(Array $a, $id)
+    public function __construct( $r, $id)
     {
-        $this->ratingInfo=$a;
+        $this->rating=$r;
         $this->eventId=$id;
     }
 

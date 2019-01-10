@@ -24,15 +24,49 @@ class EventsController extends Controller
     public function filteredEvents(Request $request)
     {
         $subIDs=$request->input('SubIDs');
-        $events=Event::whereIn('SubID', $subIDs)->get();
-        if (isset($events))
-        return $events;
+        $events=Event::whereIn('SubID', $subIDs)->with('pictures')->get();
+        $pic=array();
+        $msg=array();
+        if(isset($events))
+        {
+        foreach( $events as $event)
+        {
+        foreach( $event->pictures as $p)
+        {
+            array_push($pic, $p->PicturePath);
+        }
+
+            $mess= array("id"=>$event->id, "EventName"=>$event->EventName, "Location"=>$event->Location, 
+            "Time"=>$event->Time, "City"=>$event->City, "SubID"=>$event->SubID, 
+            "Rating"=>$event->Rating, "UserID"=>$event->UserID, "PicturePath"=>$pic );
+            array_push($msg, $mess);
+
+        }
+        return $msg;
+    }
+    
         else return -1;
+        // if (isset($events))
+        // return $events;
+        // else return -1;
     }
 
     public function alle()
     {
         return Event::with('userRatings', 'userComments', 'pictures', 'creator', 'category')->get();
+    }
+
+    public function getComments(Request $request)
+    {
+        $event = Event::where('id', $request->input('id'))->with('userComments')->first();
+        $comments=array();        
+        foreach( $event->userComments as $c)
+        {
+            $newArr = array('username'=> $c->Username, 'comment'=> $c->pivot->Comment);
+            array_push($comments, $newArr);
+        }
+
+        return $comments;
     }
 
     public function addrating(Request $request)
@@ -69,10 +103,12 @@ class EventsController extends Controller
         }
 
         $rating= $rating/$num;
+        $event->Rating= $rating;
+        $event->save();
 
         //$a= array("Rating"=>$rating, "Username" =>$user->Username);
-        //event(new NewRating($a, $event->id));
-        return $rating;
+        event(new NewRating($event->Rating, $event->id));
+        return 1;
         }
         else return -1;
     }
@@ -81,15 +117,15 @@ class EventsController extends Controller
     //EventId, UserID, comment
     {
         $event=Event::where('id', $request->input('EventID'))->first();
-        $user=User::where('id', $request->input('userID'))->first();
+        $user=User::where('id', $request->input('UserID'))->first();
 
         if(isset($event))
         {
-        $event->userComments()->attach($request->input('userID'), ['comment' => $request->input('Comment')]);
+        $event->userComments()->attach($request->input('UserID'), ['Comment' => $request->input('comment')]);
         $event->save();
 
-        $a= array("Comment"=>$request->input('Comment'), "Username" =>$user->Username);
-        event(new NewComment($a, $event->id));
+        event(new NewComment($request->input('comment'), $user->Username , $event->id));
+        return 1;
         }
         else return -1;
     }
@@ -109,6 +145,7 @@ class EventsController extends Controller
         $event->Time = $request->input('time');
         $event->UserID =User::find(1)->id;
         $event->SubID = Subscription::find(1)->id;
+        $event->Rating = 0 ;
         
         $event->save();
         //$event->userComments()->attach(1 , ['comment' => 'ovo je neki komentar na neki event']);
@@ -118,17 +155,11 @@ class EventsController extends Controller
         return redirect ('/events');
     }
 
-    public function addEvent(Request $request)
+    public function insertPictures(Request $request)
     {
-        $event = new Event();
-        $event->EventName = $request->input('EventName');
-        $event->Location = $request->input('Location');
-        $event->City = $request->input('City');
-        $event->Time = $request->input('Time');   
-        $event->UserID =$request->input('UserID');
-        $event->SubID = $request->input('SubID');
-        $event->save();
-
+        $event=Event::where('id', $request->input('EventID'))->first();
+        if(isset($event))
+        {
         $i=array();
         $i=$request->input('image');
         if ($request->file('image')!=null)
@@ -147,13 +178,30 @@ class EventsController extends Controller
 
             $event->pictures()->attach($pic);
         }
-        $event->save();
+        $event->save();       
 
         event(new NewEvent($event));
-        if(isset($event))
-            return 1;
-        else return -1;
+        return 1;
         }
-        else return -2;
+        return -2;
+        }
+        return -1;
+    }
+
+    public function addEvent(Request $request)
+    {
+        $event = new Event();
+        $event->EventName = $request->input('EventName');
+        $event->Location = $request->input('Location');
+        $event->City = $request->input('City');
+        $event->Time = $request->input('Time');   
+        $event->UserID =$request->input('UserID');
+        $event->SubID = $request->input('SubID');
+        $event->Rating = 0;
+        $event->save();
+        
+        if(isset($event))
+            return $event->id;
+        else return -1;
     }
 }
